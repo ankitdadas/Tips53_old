@@ -1,50 +1,117 @@
-import React, { Component } from 'react';
-import { FormControl, TextField, OutlinedInput, InputLabel, InputAdornment, Button } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            '& .MuiTextField-root': {
-                margin: theme.spacing(1),
-                width: 200,
-            },
-        },
-    }),
-);
+import React, { Component, useState } from 'react';
+import { Avatar, TextField, Container, Typography, Button, CssBaseline, FormControlLabel, Checkbox, Grid, Link, Box } from '@material-ui/core';
+import { LockOutlined } from '@material-ui/icons';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { errorMessage } from './../Constants/errorMessage';
 
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://material-ui.com/">
+                Your Website
+        </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 
 
 
 export default function Login() {
     const classes = useStyles();
+    const [error, setError] = useState({ error: { email: '', password: '' } });
+    const changeHandler = (e) => {
+        if (!e.target.value) {
+            setError({ [e.target.name]: errorMessage[e.target.name] });
+        }
+    }
 
     return (
-        <form className={classes.root} noValidate autoComplete="off">
-            <TextField error id="outlined-basic" label="Outlined" variant="outlined" />
-            {/*  <FormControl className={classes.margin} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                    labelWidth={70}
-                />
-            </FormControl> */}
-            <Button variant="contained">Default</Button>
-        </form>
-    );
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlined />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+          </Typography>
+                <form className={classes.form} noValidate>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        helperText={error.email}
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        onChange={changeHandler}
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        helperText={error.password}
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        onChange={changeHandler}
+                        autoComplete="current-password"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Sign In
+            </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={8}>
+                <Copyright />
+            </Box>
+        </Container>);
 }
