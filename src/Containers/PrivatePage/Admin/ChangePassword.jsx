@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
-import WithPublic from './../Components/hoc/WithPublic';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { PAGE_PATH } from './../Constants/config';
-import { checkValidity } from './../Shared/index';
-import httpService from './../API/HttpService/httpService';
+import httpService from '../../../API/HttpService/httpService';
+import { checkValidity } from './../../../Shared/index';
+
 const useStyles = makeStyles((theme) => ({
-    form: {
+    root: {
+        width: '100%',
+        display: 'block'
+    }, form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
 }));
-export default function Login() {
+const ChangePassword = () => {
     const classes = useStyles();
     const [isBtnDisabled, setButtonDisabled] = useState(false);
     const [stateObj, setError] = useState({
@@ -66,7 +65,7 @@ export default function Login() {
     }
 
     return (
-        <WithPublic heading={"Sign in"} pageLink={PAGE_PATH.forgotPassword} pageName="Forgot Password?">
+        <div className={classes.root}>
             <form className={classes.form} noValidate>
                 <TextField
                     variant="outlined"
@@ -94,10 +93,7 @@ export default function Login() {
                     onChange={changeHandler}
                     autoComplete="current-password"
                 />
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                />
+
                 <Button
                     type="submit"
                     fullWidth
@@ -108,8 +104,11 @@ export default function Login() {
                     disabled={!isBtnDisabled}
                 >
                     Sign In
-            </Button>
+
+                </Button>
             </form>
-        </WithPublic>
+        </div>
     );
-}
+};
+
+export default ChangePassword;

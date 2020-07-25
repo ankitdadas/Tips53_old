@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
 import WithPublic from './../Components/hoc/WithPublic';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { PAGE_PATH } from './../Constants/config';
 import { checkValidity } from './../Shared/index';
-import httpService from './../API/HttpService/httpService';
 const useStyles = makeStyles((theme) => ({
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -14,17 +13,17 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export default function Login() {
+const ForgotPassword = () => {
     const classes = useStyles();
     const [isBtnDisabled, setButtonDisabled] = useState(false);
     const [stateObj, setError] = useState({
         error: {
             email: { errorObject: { required: true, errorMessage: "", isValid: true } },
-            password: {
-                errorObject: { required: true, errorMessage: "", minLength: 10, isValid: true }
+            userName: {
+                errorObject: { required: true, errorMessage: "", minLength: 8, isValid: true }
             }
         },
-        account: { email: '', password: '' }
+        account: { email: '', userName: '' }
     });
 
     useEffect(() => {
@@ -54,19 +53,14 @@ export default function Login() {
 
     }
     const onSubmitHandler = (e) => {
-        const { account } = stateObj;
-        const { email, password } = account;
-        httpService.post('/login', {
-            username: email,
-            password
-        }).then((res) => {
-            console.log(res);
-        });
         e.preventDefault();
     }
 
     return (
-        <WithPublic heading={"Sign in"} pageLink={PAGE_PATH.forgotPassword} pageName="Forgot Password?">
+        <WithPublic heading={"Forgot Password"}
+            pageLink={PAGE_PATH.login}
+            subTitle={"Email will be sent on your Email ID to reset password"}
+            pageName="Return to Log in">
             <form className={classes.form} noValidate>
                 <TextField
                     variant="outlined"
@@ -84,20 +78,16 @@ export default function Login() {
                 <TextField
                     variant="outlined"
                     margin="normal"
-                    error={!stateObj.error.password.errorObject.isValid}
-                    helperText={stateObj.error.password.errorObject.errorMessage}
+                    error={!stateObj.error.userName.errorObject.isValid}
+                    helperText={stateObj.error.userName.errorObject.errorMessage}
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
+                    name="userName"
+                    label="User name"
+                    type="text"
+                    id="userName"
                     onChange={changeHandler}
-                    autoComplete="current-password"
                 />
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                />
+
                 <Button
                     type="submit"
                     fullWidth
@@ -107,9 +97,11 @@ export default function Login() {
                     onClick={onSubmitHandler}
                     disabled={!isBtnDisabled}
                 >
-                    Sign In
+                    Submit
             </Button>
             </form>
         </WithPublic>
     );
-}
+};
+
+export default ForgotPassword;
